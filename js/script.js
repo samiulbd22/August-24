@@ -84,7 +84,7 @@ const members = {
 
     "01814843266":{
         name:"Istiaq Ahmad Udoy",
-        join:"old",
+        
         // pre-previous month list
         post_payable        :2854,
         previous_paid       :4500,
@@ -104,7 +104,7 @@ const members = {
     },
     "01922362569":{
         name:"Md Moniruzzaman",
-        join:"old",
+        
         // pre-previous month list
         post_payable        :2050,
         previous_paid       :3300,
@@ -129,7 +129,7 @@ const members = {
         post_payable        :2700,
         previous_paid       :500,
         previous_dining_cost:0,
-        payment             :{"02/08/24-DBBL":2000,"10/08/24-cash":3000,"13/08/24-cash":2000},
+        payment             :{"02/08/24-Cash":2000,"10/08/24-Cash":3000,"13/08/24-Cash":2000},
         // running month
         stay_cost       :2700,
         garage_cost     :0,
@@ -144,7 +144,7 @@ const members = {
     },
     "01780608997":{
         name:"Md Tushar Biswas",
-        join:"old",
+        
         // pre-previous month list
         post_payable        :5550,
         previous_paid       :7000,
@@ -164,7 +164,7 @@ const members = {
     },
     "01640454889":{
         name:"Imran",
-        join:"old",
+        
         // pre-previous month list
         post_payable        :3214,
         previous_paid       :5000,
@@ -184,7 +184,7 @@ const members = {
     },
     "01645122114":{
         name:"Azmir Hossain Poran",
-        join:"old",
+        
         // pre-previous month list
         post_payable        :5123,
         previous_paid       :6220,
@@ -204,7 +204,7 @@ const members = {
     },
     "01714443406":{
         name:"Khondokar Emon Ahmed",
-        join:"old",
+        
         // pre-previous month list
         post_payable        :3454,
         previous_paid       :6000,
@@ -224,7 +224,7 @@ const members = {
     },
     "01834648400":{
         name:"Rafiqul Islam Piyas",
-        join:"old",
+        
         // pre-previous month list
         post_payable        :2501,
         previous_paid       :4000,
@@ -243,7 +243,7 @@ const members = {
         totalPayable
     },
     "01821245430":{
-        name:"Md. Yasin",
+        name:"Md Yasin",
         join:"new",
         // pre-previous month list
         post_payable        :3500,
@@ -263,12 +263,15 @@ const members = {
         totalPayable
     },
 }
-let KhalaBill     = members.khalaBill;
-let netBill       = members.netBill;
-let serviceBill   = members.serviceBill;
-let otherBill     = members.othersBill;   
-let diningRate    = members.runningMealRate;
-
+const KhalaBill     = members.khalaBill;
+const netBill       = members.netBill;
+const serviceBill   = members.serviceBill;
+const otherBill     = members.othersBill;   
+const diningRate    = members.runningMealRate;
+function joinNew(){
+   
+    return (KhalaBill + netBill + serviceBill + otherBill)
+}
 function preMonth(){
     let substractPreMonth = 0;
     let addPreMonth = 0;
@@ -311,16 +314,8 @@ function runningMonth(){
     return {diningAdd,diningDue,remainDining}
 }
 function totalPayable(){ 
-    if(members["01744459622"].join === "new" || members["01821245430"].join === "new"){
-        KhalaBill= 0;
-        netBill = 0;
-        serviceBill=0;
-        otherBill=0;
-        return this.stay_cost+ this.garage_cost + this.preMonth().addPreMonth - this.preMonth().substractPreMonth;
-    }else{
-        return this.stay_cost+ this.garage_cost + KhalaBill + netBill + serviceBill + otherBill + this.preMonth().addPreMonth - this.preMonth().substractPreMonth;
-    }
-    
+
+    return (this.stay_cost + this.garage_cost + KhalaBill + netBill + serviceBill + otherBill + this.preMonth().addPreMonth - this.preMonth().substractPreMonth);
 }
 
 //clock Schedule
@@ -486,11 +481,11 @@ function opener(){
             document.getElementById("submitBtn").style.display = 'inline-block';
             /*frontPage*///runningMonthPayment
             memberName.innerHTML = `<span">${members[memberNumber].name}</span>`;
-            runningMonthPayment.innerHTML = `<tr><td>${members.runningMonth}</td><td style="text-align: center;"><b>${members[memberNumber].totalPayable()}</b>&nbsp;<span>TK</span></td></tr>`;
+            runningMonthPayment.innerHTML = `<tr><td>${members.runningMonth}</td><td style="text-align: center;"><b>${members[memberNumber].join==="new"?members[memberNumber].totalPayable()-joinNew():members[memberNumber].totalPayable()}</b>&nbsp;<span>TK</span></td></tr>`;
             /*frontPage*/
             /*payment list*/
             runningMonthOfOayment.innerHTML = `<span">${members.runningMonth}</span>`;
-            payMeBoss.innerHTML = `<b>${members[memberNumber].totalPayable()}</b>&nbsp;<span>tk</span>`;
+            payMeBoss.innerHTML = `<b>${members[memberNumber].join==="new"?members[memberNumber].totalPayable()-joinNew():members[memberNumber].totalPayable()}</b>&nbsp;<span>tk</span>`;
             const payment = members[memberNumber].payment;
             if(payment === undefined){
                 paymentList.innerHTML = `<tr><td colspan="3" style="color:'red'">your payment not yet added</td></tr>`;
@@ -518,22 +513,22 @@ function opener(){
             <tr>
                 <td>Khala's bill</td>
                 <td>=</td>
-                <td>${KhalaBill}</td>
+                <td>${members[memberNumber].join==="new"? "0" : KhalaBill }</td>
             </tr>
             <tr>
                 <td>Net's Bill</td>
                 <td>=</td>
-                <td>${netBill}</td>
+                <td>${members[memberNumber].join==="new"? "0" : netBill }</td>
             </tr>
             <tr>
                 <td>Service Cost</td>
                 <td>=</td>
-                <td>${serviceBill}</td>
+                <td>${members[memberNumber].join==="new"? "0" : serviceBill }</td>
             </tr>
             <tr>
                 <td>Other Cost</td>
                 <td>=</td>
-                <td>${otherBill}</td>
+                <td>${members[memberNumber].join==="new"? "0" : otherBill }</td>
             </tr>
             <tr id="substruct">
                 <td>Get from Dining </td>
@@ -555,7 +550,7 @@ function opener(){
             }else{
                 document.getElementById('add').style.color = 'red';
             }
-            detailsItemTotal.innerHTML = `<tr id="bg-pink"><th colspan="2">Total</th><th>${members[memberNumber].totalPayable()}</th></tr>`
+            detailsItemTotal.innerHTML = `<tr id="bg-pink"><th colspan="2">Total</th><th>${members[memberNumber].join==="new"?members[memberNumber].totalPayable()-joinNew():members[memberNumber].totalPayable()}</th></tr>`
             /* detail payment */
             /*previousMonth*/
             previousMonthName.innerHTML = `<span>${members.previousMonth}</span>`
