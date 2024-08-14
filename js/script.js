@@ -84,6 +84,7 @@ const members = {
 
     "01814843266":{
         name:"Istiaq Ahmad Udoy",
+        join:"old",
         // pre-previous month list
         post_payable        :2854,
         previous_paid       :4500,
@@ -103,6 +104,7 @@ const members = {
     },
     "01922362569":{
         name:"Md Moniruzzaman",
+        join:"old",
         // pre-previous month list
         post_payable        :2050,
         previous_paid       :3300,
@@ -120,19 +122,20 @@ const members = {
         runningMonth,
         totalPayable
     },
-    "01532023080":{
-        name:"Sony Hasan",
+    "01744459622":{
+        name:"Shariful Islam",
+        join:"new",
         // pre-previous month list
-        post_payable        :3298,
-        previous_paid       :4500,
+        post_payable        :2700,
+        previous_paid       :500,
         previous_dining_cost:0,
-        payment             :undefined,
+        payment             :{"02/08/24-DBBL":2000,"10/08/24-cash":3000,"13/08/24-cash":2000},
         // running month
-        stay_cost       :2500,
+        stay_cost       :2700,
         garage_cost     :0,
-        running_payable :0,
-        running_paid    :0,
-        running_meal    :0,
+        running_payable :4900,
+        running_paid    :7000,
+        running_meal    :26,
         // method calling
         preMonth,
         runningDiningCost,
@@ -141,6 +144,7 @@ const members = {
     },
     "01780608997":{
         name:"Md Tushar Biswas",
+        join:"old",
         // pre-previous month list
         post_payable        :5550,
         previous_paid       :7000,
@@ -160,6 +164,7 @@ const members = {
     },
     "01640454889":{
         name:"Imran",
+        join:"old",
         // pre-previous month list
         post_payable        :3214,
         previous_paid       :5000,
@@ -179,6 +184,7 @@ const members = {
     },
     "01645122114":{
         name:"Azmir Hossain Poran",
+        join:"old",
         // pre-previous month list
         post_payable        :5123,
         previous_paid       :6220,
@@ -189,7 +195,7 @@ const members = {
         garage_cost     :0,
         running_payable :5195,
         running_paid    :5000,
-        running_meal    :19,
+        running_meal    :20,
         // method calling
         preMonth,
         runningDiningCost,
@@ -198,6 +204,7 @@ const members = {
     },
     "01714443406":{
         name:"Khondokar Emon Ahmed",
+        join:"old",
         // pre-previous month list
         post_payable        :3454,
         previous_paid       :6000,
@@ -217,6 +224,7 @@ const members = {
     },
     "01834648400":{
         name:"Rafiqul Islam Piyas",
+        join:"old",
         // pre-previous month list
         post_payable        :2501,
         previous_paid       :4000,
@@ -227,7 +235,27 @@ const members = {
         garage_cost     :0,
         running_payable :1829,
         running_paid    :3000,
-        running_meal    :22,
+        running_meal    :21,
+        // method calling
+        preMonth,
+        runningDiningCost,
+        runningMonth,
+        totalPayable
+    },
+    "01821245430":{
+        name:"Md. Yasin",
+        join:"new",
+        // pre-previous month list
+        post_payable        :3500,
+        previous_paid       :3000,
+        previous_dining_cost:0,
+        payment             :{"07/08/24-Cash":3500},
+        // running month
+        stay_cost       :3500,
+        garage_cost     :0,
+        running_payable :4000,
+        running_paid    :3500,
+        running_meal    :26,
         // method calling
         preMonth,
         runningDiningCost,
@@ -235,11 +263,11 @@ const members = {
         totalPayable
     },
 }
-const KhalaBill     = members.khalaBill;
-const netBill       = members.netBill;
-const serviceBill   = members.serviceBill;
-const otherBill     = members.othersBill;   
-const diningRate    = members.runningMealRate;
+let KhalaBill     = members.khalaBill;
+let netBill       = members.netBill;
+let serviceBill   = members.serviceBill;
+let otherBill     = members.othersBill;   
+let diningRate    = members.runningMealRate;
 
 function preMonth(){
     let substractPreMonth = 0;
@@ -283,7 +311,16 @@ function runningMonth(){
     return {diningAdd,diningDue,remainDining}
 }
 function totalPayable(){ 
-    return this.stay_cost+ this.garage_cost + KhalaBill + netBill + serviceBill + otherBill + this.preMonth().addPreMonth - this.preMonth().substractPreMonth;
+    if(members["01744459622"].join === "new" || members["01821245430"].join === "new"){
+        KhalaBill= 0;
+        netBill = 0;
+        serviceBill=0;
+        otherBill=0;
+        return this.stay_cost+ this.garage_cost + this.preMonth().addPreMonth - this.preMonth().substractPreMonth;
+    }else{
+        return this.stay_cost+ this.garage_cost + KhalaBill + netBill + serviceBill + otherBill + this.preMonth().addPreMonth - this.preMonth().substractPreMonth;
+    }
+    
 }
 
 //clock Schedule
@@ -442,9 +479,9 @@ function opener(){
 //runningMonthPayment
     if(memberNumber.length === 11){
         if( memberNumber === "01834648400" || memberNumber === "01814843266" 
-         || memberNumber === "01922362569" || memberNumber === "01532023080"
+         || memberNumber === "01922362569" || memberNumber === "01744459622"
          || memberNumber === "01780608997" || memberNumber === "01640454889"
-         || memberNumber === "01645122114" || memberNumber === "01714443406"){
+         || memberNumber === "01645122114" || memberNumber === "01714443406"||memberNumber==="01821245430"){
             document.getElementById("user-btn").style.opacity = 1;
             document.getElementById("submitBtn").style.display = 'inline-block';
             /*frontPage*///runningMonthPayment
@@ -494,7 +531,7 @@ function opener(){
                 <td>${serviceBill}</td>
             </tr>
             <tr>
-                <td>Router Cost</td>
+                <td>Other Cost</td>
                 <td>=</td>
                 <td>${otherBill}</td>
             </tr>
@@ -504,7 +541,7 @@ function opener(){
                 <td>${members[memberNumber].preMonth().substractPreMonth}</td>
             </tr>
             <tr id="add">
-                <td>Due in Dining</td>
+                <td>${members[memberNumber].join==="new"?"Due in Advance":"Due in Dining"}</td>
                 <td>=</td>
                 <td>${members[memberNumber].preMonth().addPreMonth}</td>
             </tr>
@@ -548,7 +585,7 @@ function opener(){
                                             <td><b>${members[memberNumber].preMonth().substractPreMonth}</b></td>
                                         </tr>
                                         <tr id="due">
-                                            <td>dining due</td>
+                                            <td>${members[memberNumber].join==="new"?"Due in Advance":"Due in Dining"}</td>
                                             <td>=</td>
                                             <td><b>${members[memberNumber].preMonth().addPreMonth}</b></td>
                                         </tr>`;
@@ -561,7 +598,7 @@ function opener(){
             }
             /*previousMonth*/
             /*running month*/
-            runningMonthName.innerHTML =`<span>${members.runningMonth} dining</span>`;
+            runningMonthName.innerHTML =`<span>${members.runningMonth}</span>`;
             diningCostList.innerHTML = `<tr id="bg-grey">
                                             <td></td>
                                             <td>Meals</td>
@@ -569,7 +606,7 @@ function opener(){
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <td>Dining</td>
+                                            <td>Running</td>
                                             <td>${members[memberNumber].running_meal}</td>
                                             <td>${diningRate}</td>
                                             <td>${members[memberNumber].runningDiningCost()}</td>
@@ -613,11 +650,11 @@ function opener(){
                                                 <td>${members["01922362569"].runningMonth().diningDue}</td>
                                             </tr>
                                             <tr>
-                                                <td>${members["01532023080"].name}</td>
-                                                <td>${members["01532023080"].runningDiningCost()}</td>
-                                                <td>${members["01532023080"].runningMonth().diningAdd}</td>
-                                                <td class="getMeals">${members["01532023080"].runningMonth().remainDining}</td>
-                                                <td>${members["01532023080"].runningMonth().diningDue}</td>
+                                                <td>${members["01744459622"].name}</td>
+                                                <td>${members["01744459622"].runningDiningCost()}</td>
+                                                <td>${members["01744459622"].runningMonth().diningAdd}</td>
+                                                <td class="getMeals">${members["01744459622"].runningMonth().remainDining}</td>
+                                                <td>${members["01744459622"].runningMonth().diningDue}</td>
                                             </tr>
 
                                             <tr>
@@ -657,7 +694,15 @@ function opener(){
                                                 <td>${members["01834648400"].runningMonth().diningAdd}</td>
                                                 <td class="getMeals">${members["01834648400"].runningMonth().remainDining}</td>
                                                 <td>${members["01834648400"].runningMonth().diningDue}</td>
-                                            </tr> `;
+                                            </tr> 
+                                            <tr>
+                                                <td>${members["01821245430"].name}</td>
+                                                <td>${members["01821245430"].runningDiningCost()}</td>
+                                                <td>${members["01821245430"].runningMonth().diningAdd}</td>
+                                                <td class="getMeals">${members["01821245430"].runningMonth().remainDining}</td>
+                                                <td>${members["01821245430"].runningMonth().diningDue}</td>
+                                            </tr>
+                                            `;
             let colorChanged = document.getElementsByClassName('getMeals');
         
             for (let nd = 0; nd < colorChanged.length; nd++) {
@@ -693,11 +738,11 @@ function opener(){
                                                 <td class="due-me">${members["01922362569"].runningMonth().diningDue}</td>
                                             </tr>
                                             <tr>
-                                                <th>${members["01532023080"].name}</th>
-                                                <td class="payable">${members["01532023080"].totalPayable()}</td>
-                                                <td class="paid-me">${members["01532023080"].running_paid}</td>
-                                                <td class="dining-me">${members["01532023080"].runningDiningCost()}</td>
-                                                <td class="due-me">${members["01532023080"].runningMonth().diningDue}</td>
+                                                <th>${members["01744459622"].name}</th>
+                                                <td class="payable">${members["01744459622"].totalPayable()}</td>
+                                                <td class="paid-me">${members["01744459622"].running_paid}</td>
+                                                <td class="dining-me">${members["01744459622"].runningDiningCost()}</td>
+                                                <td class="due-me">${members["01744459622"].runningMonth().diningDue}</td>
                                             </tr>
                                             <tr>
                                                 <th>${members["01780608997"].name}</th>
@@ -733,6 +778,13 @@ function opener(){
                                                 <td class="paid-me">${members["01834648400"].running_paid}</td>
                                                 <td class="dining-me">${members["01834648400"].runningDiningCost()}</td>
                                                 <td class="due-me">${members["01834648400"].runningMonth().diningDue}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>${members["01821245430"].name}</th>
+                                                <td class="payable">${members["01821245430"].totalPayable()}</td>
+                                                <td class="paid-me">${members["01821245430"].running_paid}</td>
+                                                <td class="dining-me">${members["01821245430"].runningDiningCost()}</td>
+                                                <td class="due-me">${members["01821245430"].runningMonth().diningDue}</td>
                                             </tr>
                                             `;
                 
