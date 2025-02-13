@@ -103,7 +103,7 @@ const members = {
         totalPayable
     },
     "01922362569":{
-        name:"Md Moniruzzaman",
+        name:"Md Moniruzzaman",,,
         
         // pre-previous month list
         post_payable        :2050,
